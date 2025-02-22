@@ -1,8 +1,9 @@
 class heapify__{
-    static  Solution s=new Solution();
     public static void main(String[] args) {
         int[] a = {8,9,0,7,10,0,0,10,11,12,3};
-        heapify(a,1,a.length);
+        // heapify(a,1,a.length);
+        heap_sort(a);
+
         for(int i:a)System.out.print(i+" ");
 
     }
@@ -21,5 +22,19 @@ class heapify__{
         int t=a[f];
         a[f]=a[s];
         a[s]=t;
+    }
+    static void  build_heap(int a[]){
+        int n=a.length;
+        for(int i=n-1;i>=0;i--){
+            heapify(a,i,n);
+        }
+    }
+    static void heap_sort(int a[]){
+        int n=a.length;
+        build_heap(a);
+        for(int i=n-1;i>=0;i--){
+            swap(a,0,i);
+            heapify(a,0,i);
+        }
     }
 }

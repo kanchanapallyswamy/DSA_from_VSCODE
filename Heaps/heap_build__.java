@@ -1,10 +1,16 @@
-class heapify__{
-    static  Solution s=new Solution();
+public class heap_build__ {
     public static void main(String[] args) {
-        int[] a = {8,9,0,7,10,0,0,10,11,12,3};
-        heapify(a,1,a.length);
-        for(int i:a)System.out.print(i+" ");
-
+        int[] arr = {1, 3, 5, 4, 6};
+        build_heap(arr);
+        for (int i : arr) {
+            System.out.print(i + " ");
+        }
+    }
+    static void build_heap(int a[]){
+        int n=a.length;
+        for(int i=n-1;i>=0;i--){
+            heapify(a,i,n);
+        }
     }
     static void heapify(int a[], int bdx,int n){
         int mx=bdx;

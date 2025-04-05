@@ -14,6 +14,8 @@ static int find_ele(int[] a, int t){
         if(a[m]==t)
         {
             
+        }
+            
         else if(a[m]<t)l=m+1;
         else h=m-1;
     }

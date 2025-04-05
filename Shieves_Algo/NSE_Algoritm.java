@@ -27,7 +27,6 @@ static int[] NSE(int a[]){
         // st.push(0);
 
         for(int i=0;i<n;i++){
-
             while(!st.isEmpty() && a[i]>a[st.peek()]){
                 nse[st.pop()]=a[i];
 

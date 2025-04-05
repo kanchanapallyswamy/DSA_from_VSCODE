@@ -17,8 +17,7 @@ public class find_ceil_floor {
             else
             {
                 c=m;
-
-             h=m-1;
+                h=m-1;
             }
         }
             if(c==-1)return Integer.MAX_VALUE;

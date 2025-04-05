@@ -2,100 +2,65 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 import java.util.function.Function;
-//import static java.util.math.*;
 
-
-class BST{
-    int data;
-    int h;
-    BST left,right;
-    public BST(int data){
-        this.data=data;
-        this.h=1;
+class tree{
+    tree left,right;
+    int x;
+    public tree(int x) {
+        this.x=x;
     }
 }
-
-class Solution{
-
-static BST insert(BST root,int x){
-        if(root==null)return new BST(x);
-        else if(x<root.data)root.left=insert(root.left, x);
-        else root.right=insert(root.right,x);
-        Height_BST(root);
-        if(get_BT(root)<-1){ //RR
-            if(get_BT(root.right)<=1){
-              root= left_rotate(root);
-              
-            }
-            else{
-               root.right=right_rotate(root.right);
-               root=left_rotate(root);              
-
-            }
-
-        }
-        else if(get_BT(root)>1){ //Left Heavy
-            if(get_BT(root.left)>=1){  // LL
-        root=right_rotate(root);
-
-        }
-        else{
-             root.left=left_rotate(root.left);
-             root=right_rotate(root);
-        }
-    }
-        
-        return root;
-}
-
-
-static BST left_rotate(BST root) {
-    BST t1=root.right,t2=t1.left;
-    t1.left=root;
-    root.right=t2;
-    Height_BST(root);
-    Height_BST(t1);
-    return t1;
-
-}
-static BST right_rotate(BST root) {
-    BST t1=root.left,t2=t1.right;
-    t1.right=root;
-    root.left=t2;
-    Height_BST(root);
-    Height_BST(t1);
-    return t1;
-
-}
-static void Height_BST(BST root){
-    root.h=1+Math.max(root.left==null?0:root.left.h , root.right==null?0:root.right.h);
-}
-
-static int get_BT(BST root){
-    return (root.left==null?0:root.left.h)-(root.right==null?0:root.right.h);
-
-}
-}
-
-public class AVL {
-    static Solution s = new Solution();
+public class bst_paths {
     public static void main(String[] args) {
-        int a[]={3,7,2,1,3,4,6,3,9,10,12,20,40,50,35,25,65,40,67};
-        BST root=null;
-        TreePrinter<BST> printer = new TreePrinter<>(n->""+n.data, n->n.left, n->n.right);
-
-
-        for(int i:a){
-            root=s.insert(root,i);
-        }
+          Scanner scanner = new Scanner(System.in);
+        int a[]={5,7,1,10,9,3,11,6};
+        tree root=null;
+        TreePrinter<tree> printer = new TreePrinter<>(n->""+n.x, n->n.left, n->n.right);
+        for(var i:a)root=insert(root,i);
+        System.out.println("Binary Tree:");   
         printer.printTree(root);
-
+        List<Integer> list=find(root,10);
+        System.out.println(list);
     }
-    
+    static List<Integer> find(tree root,int x){
+        List<Integer> list=new ArrayList<>();
+        if(root==null)return list;
+        list.add(root.x);
+        boolean found=search(root,x,list);
+        if(found){
+            return list;
+        }
+        else return new ArrayList<Integer>();
+    }
+    static boolean search(tree root,int x,List<Integer> list){
+        if(root==null)return false;
+        if(root.x==x)return true;
+        if(root.left!=null){
+            list.add(root.left.x);
+        if(search(root.left,x,list)){
+            return true;
+        }
+        list.remove(list.size()-1);
+        }
+        if(root.right!=null){
+            list.add(root.right.x);
+            if(search(root.right,x,list)){
+                return true;
+            }
+           list.remove(list.size()-1);
+        }
+        
+        return false;
+    }
+static tree insert(tree root,int data){
+    if(root==null) return new tree(data);
+    else if(root.x>data)root.left=insert(root.left,data);
+    else root.right=insert(root.right,data);
+    return root;
 }
-
-
+}
 
 class TreePrinter<T> {
  

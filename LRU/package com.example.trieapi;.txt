@@ -1,0 +1,87 @@
+package com.example.trieapi;
+
+import org.springframework.web.bind.annotation.*;
+import java.util.*;
+
+@RestController
+@RequestMapping("/trie")
+public class TrieController {
+    private final Trie trie = new Trie();
+
+    @PostMapping("/insert")
+    public String insertWord(@RequestParam String word) {
+        trie.insertWord(word);
+        return "Word inserted: " + word;
+    }
+
+    @GetMapping("/search")
+    public boolean searchWord(@RequestParam String word) {
+        return trie.hasWord(word);
+    }
+
+    @GetMapping("/prefix")
+    public List<String> getWordsByPrefix(@RequestParam String prefix) {
+        return trie.getAllWordsWithPrefix(prefix);
+    }
+}
+
+class TNode {
+    boolean isEndOfWord = false;
+    TNode[] children = new TNode[26];
+}
+
+class Trie {
+    private final TNode root = new TNode();
+
+    void insertWord(String word) {
+        TNode temp = root;
+        for (char ch : word.toCharArray()) {
+            int index = ch - 'a';
+            if (temp.children[index] == null) {
+                temp.children[index] = new TNode();
+            }
+            temp = temp.children[index];
+        }
+        temp.isEndOfWord = true;
+    }
+
+    boolean hasWord(String word) {
+        TNode temp = root;
+        for (char ch : word.toCharArray()) {
+            int index = ch - 'a';
+            if (temp.children[index] == null) {
+                return false;
+            }
+            temp = temp.children[index];
+        }
+        return temp.isEndOfWord;
+    }
+
+    List<String> getAllWordsWithPrefix(String prefix) {
+        List<String> result = new ArrayList<>();
+        TNode temp = root;
+        for (char ch : prefix.toCharArray()) {
+            int index = ch - 'a';
+            if (temp.children[index] == null) {
+                return result; // Return empty list if prefix is not found
+            }
+            temp = temp.children[index];
+        }
+        StringBuilder path = new StringBuilder(prefix);
+        collectWords(temp, result, path);
+        return result;
+    }
+
+    private void collectWords(TNode node, List<String> result, StringBuilder path) {
+        if (node.isEndOfWord) {
+            result.add(path.toString());
+        }
+        for (int i = 0; i < 26; i++) {
+            if (node.children[i] != null) {
+                path.append((char) (i + 'a'));
+                collectWords(node.children[i], result, path);
+                path.deleteCharAt(path.length() - 1);
+            }
+        }
+    }
+}

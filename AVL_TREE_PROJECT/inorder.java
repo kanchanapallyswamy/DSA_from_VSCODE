@@ -2,99 +2,51 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 import java.util.function.Function;
-//import static java.util.math.*;
-
 
 class BST{
-    int data;
-    int h;
     BST left,right;
-    public BST(int data){
-        this.data=data;
-        this.h=1;
+    int val;
+    BST(int v){
+        val=v;
     }
 }
 
-class Solution{
-
-static BST insert(BST root,int x){
-        if(root==null)return new BST(x);
-        else if(x<root.data)root.left=insert(root.left, x);
-        else root.right=insert(root.right,x);
-        Height_BST(root);
-        if(get_BT(root)<-1){ //RR
-            if(get_BT(root.right)<=1){
-              root= left_rotate(root);
-              
-            }
-            else{
-               root.right=right_rotate(root.right);
-               root=left_rotate(root);              
-
-            }
-
-        }
-        else if(get_BT(root)>1){ //Left Heavy
-            if(get_BT(root.left)>=1){  // LL
-        root=right_rotate(root);
-
-        }
-        else{
-             root.left=left_rotate(root.left);
-             root=right_rotate(root);
-        }
-    }
-        
-        return root;
-}
-
-
-static BST left_rotate(BST root) {
-    BST t1=root.right,t2=t1.left;
-    t1.left=root;
-    root.right=t2;
-    Height_BST(root);
-    Height_BST(t1);
-    return t1;
-
-}
-static BST right_rotate(BST root) {
-    BST t1=root.left,t2=t1.right;
-    t1.right=root;
-    root.left=t2;
-    Height_BST(root);
-    Height_BST(t1);
-    return t1;
-
-}
-static void Height_BST(BST root){
-    root.h=1+Math.max(root.left==null?0:root.left.h , root.right==null?0:root.right.h);
-}
-
-static int get_BT(BST root){
-    return (root.left==null?0:root.left.h)-(root.right==null?0:root.right.h);
-
-}
-}
-
-public class AVL {
-    static Solution s = new Solution();
+public class inorder {
     public static void main(String[] args) {
-        int a[]={3,7,2,1,3,4,6,3,9,10,12,20,40,50,35,25,65,40,67};
-        BST root=null;
-        TreePrinter<BST> printer = new TreePrinter<>(n->""+n.data, n->n.left, n->n.right);
-
-
-        for(int i:a){
-            root=s.insert(root,i);
-        }
+        int a[]={6,3,8,1,5,9};
+        BST root=new BST(a[0]);
+        root.left=new BST(a[1]);
+        root.right=new BST(a[2]);
+        root.left.left=new BST(a[3]);
+        root.left.right=new BST(a[4]);
+        root.right.right=new BST(a[5]);
+        TreePrinter<BST> printer = new TreePrinter<>(n->""+n.val, n->n.left, n->n.right);
         printer.printTree(root);
-
-    }
-    
+        List<Integer> inorder = new ArrayList<>();
+        InorderTraversal(root,inorder);
+        for(var i:inorder){
+            System.out.print(i+" ");
+        }
+        System.out.println();
+        }
+    static void InorderTraversal(BST root,List<Integer> inorder){
+            if(root==null)return  ;
+            BST c=root;
+            Stack<BST> st=new Stack<>();
+            while(c!=null || !st.isEmpty()){
+                while(c!=null){
+                    st.push(c);
+                    c=c.left;
+                }
+                c=st.pop();
+                inorder.add(c.val);
+                c=c.right;
+            }
+            
+        }
 }
-
 
 
 class TreePrinter<T> {
@@ -357,3 +309,5 @@ class TreePrinter<T> {
         }
     }
 }
+
+

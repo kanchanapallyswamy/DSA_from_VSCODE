@@ -1,0 +1,51 @@
+import java.util.*;
+import java.io.*;
+
+class BeingZero {
+    public List<Integer> findDistance(int n, List<List<Integer>> edges, int q) {
+        List<Integer> ans = new ArrayList<>();
+        Map<Integer,List<Pair>> mp=new HashMap<>();
+        for(var i:edges){
+            int u=i.get(0),v=i.get(1),w=i.get(2);
+            if(!mp.containsKey(u))mp.put(u,new ArrayList<>());
+            if(!mp.containsKey(v))mp.put(v,new ArrayList<>());
+            mp.get(u).add(new Pair(v,w));
+            mp.get(v).add(new Pair(u,w));
+        }
+        PriorityQueue<Pair> pq=new PriorityQueue<>(Comparator.comparingLong(a -> a.w));
+        long dist[]=new long[n];
+        // long parent[]=new long[n+1];
+        Arrays.fill(dist,Long.MAX_VALUE);
+        boolean out[]=new boolean[n];
+        dist[q]=0;
+        // parent[q]=-1;
+        // long w;
+        pq.add(new Pair(q,0));
+        while(pq.size()>0){
+            var p=pq.remove();
+            int u=p.v;
+            if(out[u])continue;
+            out[u]=true;
+            for(var k:mp.get(u)){
+              int v=k.v;
+              long w=k.w;
+                if( dist[u]+w < dist[v]){
+                    dist[v]=dist[u]+w;
+                    // parent[v]=u;
+                    pq.add(new Pair(v,dist[v]));
+                }
+            }
+        }
+        for(var i:dist)ans.add((int)i);
+        return ans;
+    }
+    
+}
+class Pair{
+    int v;
+    long w;
+    public Pair(int v,long w){
+        this.v=v;
+        this.w=w;
+    }
+}

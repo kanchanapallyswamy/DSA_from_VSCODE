@@ -39,10 +39,8 @@ static void heap(int a[],int i,int n){
     if(lci < n  && a[lci] > a[i])t=lci;
     if(rci < n && a[rci] > a[t])t=rci;
     if(t==i)return ;
-
     swap(a,t,i);
     heap(a,t,n);
-    
 }
 
 }

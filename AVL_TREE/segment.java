@@ -31,6 +31,7 @@ class segmentTree{
     void update(int v,int l,int r,int pos,int val){
         if(l==r){
             st[v]=val;
+            return;
         }
         else{
             int m=l+(r-l)/2;
